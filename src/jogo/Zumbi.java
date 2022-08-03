@@ -1,0 +1,114 @@
+package jogo;
+
+import java.util.Random;
+
+import jplay.URL;
+
+public class Zumbi extends Ator{
+	private int ataque = 1;
+	private boolean matouJogador=false;
+	
+	public Zumbi(int x, int y)
+	{
+		super(URL.sprite("Zumbi 00.png") , 16);
+		this.x=x;
+		this.y=y;
+		this.setTotalDuration(2000);
+		this.velocidade=0.6;
+	}
+	public void setVelocidade(double i) 
+	{
+		this.velocidade=i;
+	}
+	public double getVelocidade()
+	{
+		return this.velocidade;
+	}
+	public double getEnergia()
+	{
+		return super.energia;
+	}
+	public boolean getMatouJogador()
+	{
+		return this.matouJogador;
+	}
+	public void perseguir(double x, double y)
+	{
+			if(this.x > x && this.y <= y + 50 && this.y >= y - 50)
+			{
+				moveTo(x, y, velocidade);
+				if(direcao != 1)
+				{
+					setSequence(5, 8);
+					direcao = 1;
+				}
+				movendo=true;
+			}
+			else if(this.x < x && this.y <= y + 50 && this.y >= - 50)
+			{
+				moveTo(x, y, velocidade);
+				if(direcao != 2)
+				{
+					setSequence(9, 12);
+					direcao = 2;
+				}
+				movendo = true;
+			}
+			else if(this.y > y)
+			{
+				moveTo(x,y ,velocidade);
+				if(direcao != 4)
+				{
+					setSequence(13, 16);
+					direcao = 4;
+					
+				}
+				movendo = true;
+			}
+			else if(this.y < y)
+			{
+				moveTo(x,y ,velocidade);
+				if(direcao != 5)
+				{
+					setSequence(1, 4);
+					direcao = 5;
+					
+				}
+				movendo = true;
+			}
+			if(movendo)
+			{
+				update();
+				movendo= false;
+			}
+		
+	}
+
+	public boolean morrer() {
+		// TODO Auto-generated method stub
+		if(this.energia <= 0)
+		{
+			this.velocidade=0;
+			this.ataque=0;
+			this.direcao=0;
+			this.movendo=false;
+			this.x=1000000;
+			this.hide();
+			return true;
+		}
+		return false;
+		
+	}
+	public void atacar(Jogador jogador)
+	{
+		if(this.collided(jogador))
+		{
+			Jogador.energia -= this.ataque;
+		}
+		if(jogador.getEnergia() <=0)
+		{
+			matouJogador=true;
+		}
+	}
+	    
+}
